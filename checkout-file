@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $1 = "" ] || [ $1 = "-h" ] || [ $1 = "-help" ] || [ $1 = "--help" ]; then
+    echo "checkout-file"
+    echo "  This program download a specific file from a git repository to"
+    echo "  a specific folder, default it's the current folder"
+    echo ""
+    echo "usage: checkoutfile [options] <repo> <file-path> [<path to new folder>]"
+    echo "  -h, --help      show this help dialog"
+    echo ""
+
+
+else
+    CHECKOUT_FILE_repo=$1
+    CHECKOUT_FILE_path=$2
+    CHECKOUT_FILE_new_path=$3
+    CHECKOUT_FILE_basename=${CHECKOUT_FILE_path##*/}
+    CHECKOUT_FILE_pwd=$(pwd)
+
+    if [ -f $CHECKOUT_FILE_basename ]; then
+        echo "File already exist in current folder"
+
+    else
+        CHECKOUT_FILE_temp_dir=$(mktemp -d "${TMPDIR:-/tmp}"/checkoutfile.XXXX)
+        git clone $CHECKOUT_FILE_repo $CHECKOUT_FILE_temp_dir
+        mv $CHECKOUT_FILE_temp_dir/$CHECKOUT_FILE_path $CHECKOUT_FILE_pwd/$CHECKOUT_FILE_basename
+        rm -rf $CHECKOUT_FILE_temp_dir
+        echo "Complete"
+    fi
+fi
