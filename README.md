@@ -7,3 +7,4 @@ Usage:
 ```
 checkout-file path/to/git/repo.git path/to/file/in/repo
 ```
+where "path/to/file/in/repo" is relative to the root folder of the project (where the README tend to be located).
